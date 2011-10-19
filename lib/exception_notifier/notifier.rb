@@ -41,12 +41,23 @@ class ExceptionNotifier
           :exception_recipients => default_exception_recipients,
           :email_prefix => default_email_prefix,
           :sections => default_sections,
-          :verbose_subject => default_verbose_subject }
+          :verbose_subject => default_verbose_subject,
+          :boxcar_broadcast => false,
+          :boxcar_provider_api_key => nil,
+          :boxcar_provider_api_secret => nil }
       end
     end
 
     class MissingController
       def method_missing(*args, &block)
+      end
+    end
+
+    def boxcar_provider
+      if @options[:boxcar_broadcast] && @options[:boxcar_provider_api_key] && @options[:boxcar_provider_api_secret]
+        BoxcarAPI::Provider.new(@options[:boxcar_provider_api_key], @options[:boxcar_provider_api_secret])
+      else
+        nil
       end
     end
 
@@ -64,6 +75,13 @@ class ExceptionNotifier
         instance_variable_set("@#{name}", value)
       end
       subject = compose_subject(exception, @kontroller)
+
+      if self.boxcar_provider
+        begin
+          boxcar_provider.broadcast subject
+        rescue
+        end
+      end
 
       mail(:to => @options[:exception_recipients], :from => @options[:sender_address], :subject => subject) do |format|
         format.text { render "#{mailer_name}/exception_notification" }
