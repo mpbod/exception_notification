@@ -30,6 +30,21 @@ run on production. You can make it work by
       :sender_address => %{"notifier" <notifier@example.com>},
       :exception_recipients => %w{exceptions@example.com}
 
+Boxcar Support
+---
+
+You can use <a href="http://boxcar.io">Boxcar</a> to broadcast the exception. Setup a provider to be used with your Rails app.
+Then configure extra options in your environment like so:
+    
+    Whatever::Application.config.middleware.use ExceptionNotifier,
+      :email_prefix => "[Whatever] ",
+      :sender_address => %{"notifier" <notifier@example.com>},
+      :exception_recipients => %w{exceptions@example.com},
+      :boxcar_broadcast => true,
+      :boxcar_provider_api_key => "Your provider api key",
+      :boxcar_provider_api_secret => "Your provider api secret"
+
+
 Customization
 ---
 By default, the notification email includes four parts: request, session,
