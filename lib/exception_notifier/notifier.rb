@@ -1,4 +1,5 @@
 require 'action_mailer'
+require 'boxcar_api'
 require 'pp'
 
 class ExceptionNotifier
