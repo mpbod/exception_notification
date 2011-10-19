@@ -77,10 +77,7 @@ class ExceptionNotifier
       subject = compose_subject(exception, @kontroller)
 
       if self.boxcar_provider
-        begin
-          boxcar_provider.broadcast subject
-        rescue
-        end
+        boxcar_provider.broadcast subject
       end
 
       mail(:to => @options[:exception_recipients], :from => @options[:sender_address], :subject => subject) do |format|
