@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
 
   s.add_dependency("actionmailer", ">= 3.0.4")
+  s.add_dependency("boxcar_api", ">= 1.2.0")
   s.add_development_dependency "rails", ">= 3.0.4"
   s.add_development_dependency "sqlite3", ">= 1.3.4"
 end
